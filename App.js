@@ -9,6 +9,7 @@ import ThemeProvider from './src/contexts/ThemeProvider';
 // Custom StatusBar
 import CustomStatusBar from './src/customs/CustomStatusBar';
 
+// Test new branch
 const App = () => {
   return (
     <ThemeProvider>
