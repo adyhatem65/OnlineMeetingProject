@@ -8,14 +8,19 @@ import {
   FlatList,
 } from 'react-native';
 
-import {HMSUpdateListenerActions, HMSConfig} from '@100mslive/react-native-hms';
+import {
+  HMSUpdateListenerActions,
+  HMSConfig,
+  HMSPeer,
+  HmsView,
+} from '@100mslive/react-native-hms';
 import {useHms} from '../../contexts/HmsProvider';
 
 import {SIZES} from '../../constants/SizesAndPaddings';
 
-import {defaultTheme} from '../../constants/Theme';
-
 import {PERMISSIONS, RESULTS, requestMultiple} from 'react-native-permissions';
+
+import {useTheme} from '../../contexts/ThemeProvider';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -68,9 +73,13 @@ const RoomScreen = ({route, navigation}) => {
   // params
   const {room_id} = route.params;
 
+  // theme
+  const {theme} = useTheme();
+
   const hmsInstance = useHms();
   const [isMute, setisMute] = useState(false);
   const [participants, setParticipants] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const userID = useRef('Test User').current;
   const roomID = useRef(room_id).current;
@@ -89,13 +98,13 @@ const RoomScreen = ({route, navigation}) => {
             borderRadius: (width * 0.2) / 2,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: defaultTheme.card,
+            backgroundColor: theme.card,
           }}>
           <Text
             style={{
               fontSize: SIZES.TITLE_FONT_SIZE,
               fontWeight: '600',
-              color: defaultTheme.text,
+              color: theme.text,
             }}>
             {localPeer?.name?.substring(0, 2)?.toUpperCase()}
           </Text>
@@ -118,13 +127,13 @@ const RoomScreen = ({route, navigation}) => {
               borderRadius: (width * 0.2) / 2,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: defaultTheme.card,
+              backgroundColor: theme.card,
             }}>
             <Text
               style={{
                 fontSize: SIZES.TITLE_FONT_SIZE,
                 fontWeight: '600',
-                color: defaultTheme.text,
+                color: theme.text,
               }}>
               {remotePeer?.name?.substring(0, 2)?.toUpperCase()}
             </Text>
@@ -136,6 +145,7 @@ const RoomScreen = ({route, navigation}) => {
 
     setParticipants([localParticipant, ...remoteParticipants]);
     console.log('Joined');
+    setIsLoading(false);
   };
 
   // ON_PEER_UPDATE
@@ -153,13 +163,13 @@ const RoomScreen = ({route, navigation}) => {
             borderRadius: (width * 0.2) / 2,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: defaultTheme.card,
+            backgroundColor: theme.card,
           }}>
           <Text
             style={{
               fontSize: SIZES.TITLE_FONT_SIZE,
               fontWeight: '600',
-              color: defaultTheme.text,
+              color: theme.text,
             }}>
             {localPeer?.name?.substring(0, 2)?.toUpperCase()}
           </Text>
@@ -182,13 +192,13 @@ const RoomScreen = ({route, navigation}) => {
               borderRadius: (width * 0.2) / 2,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: defaultTheme.card,
+              backgroundColor: theme.card,
             }}>
             <Text
               style={{
                 fontSize: SIZES.TITLE_FONT_SIZE,
                 fontWeight: '600',
-                color: defaultTheme.text,
+                color: theme.text,
               }}>
               {remotePeer?.name?.substring(0, 2)?.toUpperCase()}
             </Text>
@@ -215,13 +225,13 @@ const RoomScreen = ({route, navigation}) => {
             borderRadius: (width * 0.2) / 2,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: defaultTheme.card,
+            backgroundColor: theme.card,
           }}>
           <Text
             style={{
               fontSize: SIZES.TITLE_FONT_SIZE,
               fontWeight: '600',
-              color: defaultTheme.text,
+              color: theme.text,
             }}>
             {localPeer?.name?.substring(0, 2)?.toUpperCase()}
           </Text>
@@ -244,13 +254,13 @@ const RoomScreen = ({route, navigation}) => {
               borderRadius: (width * 0.2) / 2,
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: defaultTheme.card,
+              backgroundColor: theme.card,
             }}>
             <Text
               style={{
                 fontSize: SIZES.TITLE_FONT_SIZE,
                 fontWeight: '600',
-                color: defaultTheme.text,
+                color: theme.text,
               }}>
               {remotePeer?.name?.substring(0, 2)?.toUpperCase()}
             </Text>
@@ -321,41 +331,65 @@ const RoomScreen = ({route, navigation}) => {
         joinRoom(hmsInstance, roomID, userID);
       }
     });
+
+    // return () => hmsInstance.removeAllListeners();
   }, [hmsInstance, userID, roomID]);
 
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{fontSize: 20, fontStyle: 'italic'}}>
-        Hello from RoomScreen!
-      </Text>
-      <FlatList
-        data={participants}
-        renderItem={({item, index}) => (
-          <View>
-            <Text>{item.name}</Text>
-            {item.avatar}
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-      <Button
-        title="leave"
-        onPress={async () => {
-          await hmsInstance.leave().then(() => {
-            console.log('leaved');
-          });
-        }}
-      />
-      <Button
-        title="endRoom"
-        onPress={async () => {
-          await hmsInstance.endRoom(false, 'Host ended the room');
-        }}
-      />
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: theme.background,
+      }}>
+      {isLoading ? (
+        <View>
+          <Text style={[styles.loadingTextStyle, {color: theme.text}]}>
+            Connecting...
+          </Text>
+        </View>
+      ) : (
+        <>
+          <Text style={{fontSize: 20, fontStyle: 'italic', marginBottom: 30}}>
+            Hello from RoomScreen!
+          </Text>
+          <FlatList
+            data={participants}
+            renderItem={({item, index}) => (
+              <View>
+                <Text>{item.name}</Text>
+                <Text>{item.role}</Text>
+                {/* <Text>{item.isMute.toString()}</Text> */}
+                {item.avatar}
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <Button
+            title="leave"
+            onPress={async () => {
+              await hmsInstance.leave().then(() => {
+                console.log('leaved');
+              });
+            }}
+          />
+          <Button
+            title="endRoom"
+            onPress={async () => {
+              await hmsInstance.endRoom(false, 'Host ended the room');
+            }}
+          />
+        </>
+      )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  containerStyle: {},
+  loadingTextStyle: {
+    fontSize: SIZES.FONT_SIZE,
+  },
+});
 
 export default RoomScreen;

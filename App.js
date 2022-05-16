@@ -7,7 +7,7 @@ import HmsProvider from './src/contexts/HmsProvider';
 import ThemeProvider from './src/contexts/ThemeProvider';
 
 // Custom StatusBar
-import CustomStatusBar from './src/customs/CustomStatusBar';
+import CustomStatusBar from './src/components/CustomStatusBar';
 
 // Test new branch
 const App = () => {

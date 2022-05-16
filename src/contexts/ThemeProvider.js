@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {defaultTheme, darkTheme} from '../constants/Theme';
 
-// import {useDarkMode} from 'react-native-dark-mode';
+import {useDarkMode} from 'react-native-dark-mode';
 
 export const ThemeContext = createContext();
 
@@ -15,7 +15,7 @@ const ThemeProvider = ({children}) => {
 
   // const colorScheme = useColorScheme();
 
-  // const isDarkMode = useDarkMode();
+  const isDarkMode = useDarkMode();
 
   const getTheme = async () => {
     let theme = await AsyncStorage.getItem('theme');
@@ -34,23 +34,23 @@ const ThemeProvider = ({children}) => {
     await AsyncStorage.setItem('theme', JSON.stringify(theme));
   };
 
-  // const getSystemTheme = async () => {
-  //   let index = await AsyncStorage.getItem('index');
-  //   index = JSON.parse(index);
-  //   if (index == 2) {
-  //     if (isDarkMode) {
-  //       toggleTheme('default');
-  //       await AsyncStorage.setItem('index', JSON.stringify(2));
-  //     } else {
-  //       toggleTheme('dark');
-  //       await AsyncStorage.setItem('index', JSON.stringify(2));
-  //     }
-  //   }
-  // };
+  const getSystemTheme = async () => {
+    let index = await AsyncStorage.getItem('index');
+    index = JSON.parse(index);
+    if (index == 2) {
+      if (isDarkMode) {
+        toggleTheme('default');
+        await AsyncStorage.setItem('index', JSON.stringify(2));
+      } else {
+        toggleTheme('dark');
+        await AsyncStorage.setItem('index', JSON.stringify(2));
+      }
+    }
+  };
 
-  useEffect(async () => {
-    await getTheme();
-    // getSystemTheme();
+  useEffect(() => {
+    getTheme();
+    getSystemTheme();
   }, []);
 
   const toggleTheme = async currentThemeMode => {

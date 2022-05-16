@@ -13,12 +13,13 @@ export const defaultTheme = {
     inActive: 'gray',
   },
   themeMode: 'default',
-  ripple: 'gray',
+  ripple: '#aaaaaa',
   white: '#ffffff',
   black: '#222222',
   selectionColor: '#5372F080',
   error: '#f00f00',
-  search: '#ccc7',
+  search: '#ccc',
+  disabled: '#aaaaaa60',
 };
 
 export const darkTheme = {
@@ -36,10 +37,11 @@ export const darkTheme = {
     inActive: 'gray', // '#d4d6da', // #d7d7d7
   },
   themeMode: 'dark',
-  ripple: 'gray',
+  ripple: '#aaaaaa',
   white: '#ffffff',
   black: '#222222',
   selectionColor: '##5372F080',
   error: '#f00f00',
   search: '#ccc1',
+  disabled: '#aaaaaa60',
 };
