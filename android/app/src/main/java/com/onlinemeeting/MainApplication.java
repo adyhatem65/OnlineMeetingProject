@@ -15,7 +15,9 @@ import com.facebook.react.bridge.JSIModulePackage; // <- add
 import com.swmansion.reanimated.ReanimatedJSIModulePackage; // <- add
 import com.facebook.react.modules.i18nmanager.I18nUtil;
 
-public class MainApplication extends Application implements ReactApplication {
+import androidx.multidex.MultiDexApplication;
+
+public class MainApplication extends MultiDexApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override

@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services' // <- Add this line
 
 import com.android.build.OutputFile
 
@@ -136,6 +137,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -194,6 +196,19 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // def work_version = "2.7.1"  // 
+    // Force WorkManager 2.6.0 for transitive dependency
+    implementation "androidx.work:work-runtime:2.7.1"  // -ktx 
+    // {
+    //     force = true
+    // }
+
+    implementation platform('com.google.firebase:firebase-bom:30.1.0')
+
+    implementation 'com.google.firebase:firebase-analytics'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'

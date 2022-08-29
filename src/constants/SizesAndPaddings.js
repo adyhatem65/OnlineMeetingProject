@@ -5,7 +5,7 @@ const {width, height} = Dimensions.get('screen');
 export const SIZES = {
   TITLE_FONT_SIZE: height * 0.03,
   FONT_SIZE: height * 0.02,
-  LG_FONT_SIZE: height * 0.034,
+  LG_FONT_SIZE: height * 0.033,
   MD_FONT_SIZE: height * 0.021,
   SM_FONT_SIZE: height * 0.018,
   ICON_SIZE: 22,

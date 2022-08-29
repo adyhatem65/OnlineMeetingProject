@@ -20,14 +20,18 @@ export const defaultTheme = {
   error: '#f00f00',
   search: '#ccc',
   disabled: '#aaaaaa60',
+  red: '#f00f00',
+  yellow: '#FBB448',
+  primary_overlay: '#5372F020',
+  gray: 'gray',
 };
 
 export const darkTheme = {
   primary: '#5372F0',
   background: '#232931',
   card: '#393E46',
-  text: '#eeeeee',
-  text2: '#eeeeee',
+  text: '#ffffff',
+  text2: 'gray',
   icon: '#eeeeee',
   border: 'gray', // #ffffff
   placeholder: '#636c72',
@@ -44,4 +48,8 @@ export const darkTheme = {
   error: '#f00f00',
   search: '#ccc1',
   disabled: '#aaaaaa60',
+  red: '#f00f00',
+  yellow: '#FBB448',
+  primary_overlay: '#5372F020',
+  gray: 'gray',
 };

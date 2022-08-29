@@ -14,6 +14,7 @@ const MainHeader = ({
   rightBtns,
   titlePosition,
   shadowColor,
+  elevation,
 }) => {
   const {theme, toggleTheme} = useTheme();
 
@@ -51,6 +52,7 @@ const MainHeader = ({
         {
           backgroundColor: headerBackgroundColor,
           shadowColor: shadowColor,
+          elevation: elevation,
         },
       ]}>
       {leftBtn}
@@ -94,7 +96,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     zIndex: 10,
-    elevation: 1,
     // borderBottomWidth: 0.5,
   },
   titleContainer: {
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
   titleStyle: {
     fontSize: SIZES.TITLE_FONT_SIZE,
     fontWeight: '600',
+    marginTop: -3,
   },
   rightStyle: {
     alignItems: 'center',

@@ -1,11 +1,20 @@
-import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import {SIZES, PADDINGS} from '../constants/SizesAndPaddings';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import LottieView from 'lottie-react-native';
+
+const {width, height} = Dimensions.get('screen');
 
 const RoomCard = ({
   roomBackground,
@@ -21,18 +30,23 @@ const RoomCard = ({
   iconColor,
   textColor,
   calendarDate,
+  // disablePress,
+  theme,
 }) => {
+  console.log('render');
   return (
     <View
       style={[styles.cardContainerStyle, {backgroundColor: roomBackground}]}>
       <Pressable
         style={{flex: 1}}
         android_ripple={{color: rippleColor}}
-        onPress={onPress}>
+        onPress={onPress}
+        // disabled={disablePress}
+      >
         {/* header */}
         <View style={styles.cardHeaderStyle}>
           <View style={styles.roomStatusWrapperStyle}>
-            {roomStatus == 'LIVE' ? (
+            {roomStatus ? (
               <View style={styles.lottieLiveWrapper}>
                 <LottieView
                   source={require('../assets/lottie/live.json')}
@@ -64,7 +78,7 @@ const RoomCard = ({
               <Text
                 style={[styles.mdFontSizeStyle, {color: textColor}]}
                 numberOfLines={1}>
-                {roomStatus == 'LIVE' ? 'LIVE' : calendarDate}
+                {roomStatus ? 'LIVE' : calendarDate}
               </Text>
             </View>
           </View>
@@ -83,16 +97,18 @@ const RoomCard = ({
 
         {/* content */}
         <View style={styles.cardContentStyle}>
-          <View>
+          <View style={{marginBottom: PADDINGS.PADDING}}>
             <Text style={[styles.lgFontSizeStyle, {color: textColor}]}>
               {roomTitle}
             </Text>
           </View>
-          <View style={{marginVertical: PADDINGS.PADDING}}>
-            <Text style={[styles.smFontSizeStyle, {color: textColor}]}>
-              {roomTopics.join('  -  ')}
-            </Text>
-          </View>
+          {roomTopics && roomTopics.length > 0 ? (
+            <View style={{marginBottom: PADDINGS.PADDING}}>
+              <Text style={[styles.smFontSizeStyle, {color: '#dddddd'}]}>
+                {roomTopics.join('  -  ')}
+              </Text>
+            </View>
+          ) : null}
           <View>
             <Text style={[styles.smFontSizeStyle, {color: textColor}]}>
               {`${roomNumOfListeners} listening`}
@@ -101,16 +117,19 @@ const RoomCard = ({
         </View>
 
         {/* footer */}
-        <View style={[styles.cardFooterStyle, {backgroundColor: '#00000020'}]}>
+        <View style={[styles.cardFooterStyle, {backgroundColor: '#00000018'}]}>
           <View style={styles.hostAvatarWrapperStyle}>
             <Image
-              style={{width: 22, height: 22, borderRadius: 11}}
+              style={{flex: 1, borderRadius: 11}}
               resizeMode="cover"
-              source={roomHostImage}
+              source={{uri: roomHostImage}}
             />
           </View>
-          <View style={{marginHorizontal: PADDINGS.mdPadding}}>
-            <Text style={[styles.mdFontSizeStyle, {color: textColor}]}>
+          {/* flexShrink =>  */}
+          <View style={{marginHorizontal: PADDINGS.mdPadding, flexShrink: 1}}>
+            <Text
+              style={[styles.mdFontSizeStyle, {color: textColor}]}
+              numberOfLines={1}>
               {roomHostName}
             </Text>
           </View>
@@ -149,6 +168,7 @@ const styles = StyleSheet.create({
     padding: PADDINGS.PADDING,
   },
   cardFooterStyle: {
+    width: '100%',
     padding: PADDINGS.PADDING,
     flexDirection: 'row',
     alignItems: 'center',
